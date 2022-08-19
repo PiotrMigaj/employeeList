@@ -3,10 +3,7 @@ package pl.migibud;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequestMapping("/employees")
@@ -26,6 +23,22 @@ public class EmployeeController {
 		Employee theEmployee = new Employee();
 		model.addAttribute("employee",theEmployee);
 		return "employees/employee-form";
+	}
+
+
+	@GetMapping("/showFormForUpdate")
+	public String showFormForUpdate(@RequestParam("employeeId") Integer theId,Model theModel){
+		Employee theEmployee = repository.findById(theId).get();
+		theModel.addAttribute("employee",theEmployee);
+		return "employees/employee-form";
+
+	}
+
+	@GetMapping("/delete")
+	public String delete(@RequestParam("employeeId") Integer theId){
+		repository.deleteById(theId);
+		return "redirect:/employees/list";
+
 	}
 
 	@PostMapping("/save")
